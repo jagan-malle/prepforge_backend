@@ -1,0 +1,2 @@
+import fs from 'fs/promises'; import pdf from 'pdf-parse'; import mammoth from 'mammoth';
+export async function parseResume(filePath, mimeType) { if (mimeType === 'application/pdf') { const data = await pdf(await fs.readFile(filePath)); return { text: data.text.trim(), pages: data.numpages }; } if (mimeType.includes('wordprocessingml')) { const data = await mammoth.extractRawText({ path: filePath }); return { text: data.value.trim(), pages: null }; } throw new Error('DOC parsing is not yet supported; please upload a PDF or DOCX file.'); }

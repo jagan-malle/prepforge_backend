@@ -1,0 +1,1 @@
+import { Router } from 'express'; import { protect } from '../middleware/authMiddleware.js'; import { create,list } from '../controllers/jobController.js'; const router=Router();router.use(protect);router.route('/').get(list).post(create);export default router;

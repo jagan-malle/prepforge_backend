@@ -1,0 +1,4 @@
+import RagChunk from '../../models/RagChunk.js';
+export const cosineSimilarity=(a,b)=>{if(!a?.length||a.length!==b?.length)return 0;let dot=0,aa=0,bb=0;for(let i=0;i<a.length;i++){dot+=a[i]*b[i];aa+=a[i]*a[i];bb+=b[i]*b[i];}return dot/(Math.sqrt(aa)*Math.sqrt(bb)||1);};
+export async function replaceChunks({user,sourceType,sourceId,chunks,embeddings,metadata={}}){await RagChunk.deleteMany({user,sourceType,sourceId});if(!chunks.length)return[];return RagChunk.insertMany(chunks.map((text,chunkIndex)=>({user,sourceType,sourceId,chunkIndex,text,embedding:embeddings[chunkIndex],metadata})));}
+export async function searchChunks({user,embedding,topK=Number(process.env.RAG_TOP_K)||5}){const chunks=await RagChunk.find({user}).select('text sourceType sourceId chunkIndex metadata embedding').lean();return chunks.map(chunk=>({...chunk,score:cosineSimilarity(embedding,chunk.embedding)})).sort((a,b)=>b.score-a.score).slice(0,topK).map(({embedding,...chunk})=>chunk);}

@@ -1,0 +1,2 @@
+export function notFound(req, res) { res.status(404).json({ message: `Route not found: ${req.originalUrl}` }); }
+export function errorHandler(err, req, res, next) { console.error(err); const status=err.statusCode || (err.name==='CastError'?400:500); const message=status>=500&&process.env.NODE_ENV==='production'?'An unexpected server error occurred.':err.message; res.status(status).json({ message: message || 'An unexpected server error occurred.' }); }

@@ -1,0 +1,2 @@
+import { cleanText } from './documentProcessor.js';
+export function chunkText(text,{size=Number(process.env.RAG_CHUNK_SIZE)||500,overlap=Number(process.env.RAG_CHUNK_OVERLAP)||50}={}){const clean=cleanText(text);if(!clean)return[];const chunks=[];let start=0;while(start<clean.length){let end=Math.min(clean.length,start+size);if(end<clean.length){const boundary=clean.lastIndexOf(' ',end);if(boundary>start+Math.floor(size*.55))end=boundary;}chunks.push(clean.slice(start,end).trim());if(end>=clean.length)break;start=Math.max(end-overlap,start+1);}return chunks.filter(Boolean);}

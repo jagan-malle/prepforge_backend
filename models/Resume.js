@@ -1,0 +1,2 @@
+import mongoose from 'mongoose';
+export default mongoose.model('Resume', new mongoose.Schema({ user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, originalName: { type: String, required: true }, filePath: { type: String, required: true }, mimeType: String, size: Number, extractedText: { type: String, default: '' }, rag:{indexedAt:Date,chunkCount:Number,status:{type:String,enum:['pending','ready','failed'],default:'pending'},error:String}, status: { type: String, enum: ['processing','ready','failed'], default: 'processing' } }, { timestamps: true }));

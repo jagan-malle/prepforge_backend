@@ -1,0 +1,1 @@
+import { Router } from 'express'; import { protect } from '../middleware/authMiddleware.js'; import { jobMatch,recent } from '../controllers/analysisController.js'; const router=Router();router.use(protect);router.get('/recent',recent);router.post('/job-match',jobMatch);export default router;
